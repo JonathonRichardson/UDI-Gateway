@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+    nginx-proxy:
+        image: jwilder/nginx-proxy
+        ports:
+            - "80:80"
+            - "443:443"
+        # This should run as a service, so it should be up whenever
+        # Docker is.
+        restart: unless-stopped
+        volumes:
+            # Mount the docker socket so we can query container metadata
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+            # Load the data directory for persistant storage of certs
+            - ./data:/etc/udi-gateway
+            # Add our customizations, including a default 404 page
+            - ./resources/nginx.conf:/etc/nginx/conf.d/my_proxy.conf:ro
+            # Add our static resources
+            - ./resources/static_pages:/var/www/nginx:ro
+
+networks:
+    default:
+        external:
+            name: udi-gateway
