@@ -1,3 +1,7 @@
 # Universal Docker Ingress Gateway
 
-TODO
+## Creating the certificates
+
+```
+docker run --rm -it --name cert-gen alpine:3.12.0 sh
+```
